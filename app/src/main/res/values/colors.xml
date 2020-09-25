@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#6200EE</color>
+
+    <color name="colorSurface">#7200C5</color>
+    <color name="colorSecondary">#7200C5</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorTransparentWhite">#cccccc</color>
+    <color name="gradient_start_color">#4c84ff</color>
+    <color name="gradient_end_color">#18a3fe</color>
+
+    <color name="tab_indicator_gray">#c0e0e0</color>
+    <color name="into_title_color">#000000</color>
+    <color name="intro_description_color">#656565</color>
+
+    <color name="colorSplashBackground">#000000</color>
+    <color name="colorFragmentBackground">#F0F0F0</color>
+    <color name="colorCardBackground">#FFFFFF</color>
+
+    <color name="colorTextSubHeader">#828282</color>
+    <color name="colorTextHeader">#000000</color>
+    <color name="colorLogout">#FF0000</color>
+
+    <color name="colorDivider">#333333</color>
+    <color name="colorCardBorder">#BDBDBD</color>
+
+    <color name="statusPending">#828282</color>
+    <color name="statusAccepted">#1B8700</color>
+    <color name="statusCanceled">#d32f2f</color>
+
+    <color name="colorBackgroundAppBar">#000000</color>
+    <color name="colorTextAppBar">#FFFFFF</color>
+
+    <color name="colorBlack">#000000</color>
+
+    <color name="colorOnSecondary">#FFFFFF</color>
+
+</resources>
