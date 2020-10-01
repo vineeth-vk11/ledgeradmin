@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ledgeradmin.R;
+import com.ledgeradmin.TransactionsHelper.SortTransactionsDialog;
 
 import java.util.HashMap;
 
@@ -79,7 +80,6 @@ public class AddCompanyDialog extends AppCompatDialogFragment {
                             db.collection("Companies").add(companyMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentReference> task) {
-
                                 }
                             });
                         }
@@ -100,4 +100,5 @@ public class AddCompanyDialog extends AppCompatDialogFragment {
 
         return builder.create();
     }
+
 }

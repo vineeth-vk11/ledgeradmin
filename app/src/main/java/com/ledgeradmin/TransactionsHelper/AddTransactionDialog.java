@@ -3,6 +3,7 @@ package com.ledgeradmin.TransactionsHelper;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -59,6 +62,16 @@ public class AddTransactionDialog extends AppCompatDialogFragment  implements Da
     RadioButton credit;
     RadioButton debit;
 
+    CheckBox checkBox;
+
+    String send;
+
+    public interface OnWhatsAppChecked{
+        void sendWhatsAppInput(String amount, String type, String send);
+    }
+
+    public AddTransactionDialog.OnWhatsAppChecked onWhatsAppChecked;
+
     public AddTransactionDialog(String company, String sales, String dealer, String id, String existingParticular, String existingAmount, String existingDate, String existingType, String existingVoucher) {
         this.company = company;
         this.sales = sales;
@@ -86,12 +99,25 @@ public class AddTransactionDialog extends AppCompatDialogFragment  implements Da
         amount = view.findViewById(R.id.amount_edit);
         radioGroup = view.findViewById(R.id.type);
         voucher = view.findViewById(R.id.voucher_edit);
+        checkBox = view.findViewById(R.id.checkBox);
 
         date = view.findViewById(R.id.selectdate);
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDatePickerDialog();
+            }
+        });
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isChecked()){
+                    send = "yes";
+                }
+                else{
+                    send = "no";
+                }
             }
         });
 
@@ -103,6 +129,7 @@ public class AddTransactionDialog extends AppCompatDialogFragment  implements Da
             date.setText(existingDate);
             voucher.setText(existingVoucher);
             positive = "Save";
+            checkBox.setVisibility(View.INVISIBLE);
 
             if(debit.getText().toString().equals(existingType)){
                 debit.setChecked(true);
@@ -135,7 +162,7 @@ public class AddTransactionDialog extends AppCompatDialogFragment  implements Da
                         }
 
                         String enteredParticular = particular.getText().toString();
-                        String enteredAmount = amount.getText().toString();
+                        final String enteredAmount = amount.getText().toString();
                         String selectedDate = date.getText().toString();
                         String enteredVoucher = voucher.getText().toString();
 
@@ -170,6 +197,7 @@ public class AddTransactionDialog extends AppCompatDialogFragment  implements Da
                                     .add(transaction).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentReference> task) {
+                                    onWhatsAppChecked.sendWhatsAppInput(enteredAmount, type,send);
                                 }
                             });
 
@@ -191,7 +219,6 @@ public class AddTransactionDialog extends AppCompatDialogFragment  implements Da
                                     .document(id).set(transaction).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-
                                 }
                             });
                         }
@@ -227,5 +254,16 @@ public class AddTransactionDialog extends AppCompatDialogFragment  implements Da
 
         return type;
 
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            onWhatsAppChecked = (AddTransactionDialog.OnWhatsAppChecked) getTargetFragment();
+        }catch (ClassCastException e){
+
+        }
     }
 }

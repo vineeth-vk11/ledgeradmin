@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,6 +48,10 @@ public class DealersFragment extends Fragment {
     ImageButton sort;
     ImageButton download;
     ImageButton share;
+    ImageButton logout;
+
+    ProgressBar progressBar;
+    ImageView imageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,16 +65,20 @@ public class DealersFragment extends Fragment {
         sort = getActivity().findViewById(R.id.sort);
         download = getActivity().findViewById(R.id.download);
         share = getActivity().findViewById(R.id.share);
+        logout = getActivity().findViewById(R.id.logout);
 
         sort.setVisibility(View.INVISIBLE);
         download.setVisibility(View.INVISIBLE);
         share.setVisibility(View.INVISIBLE);
+        logout.setVisibility(View.INVISIBLE);
 
         Bundle bundle = getArguments();
         salesId = bundle.getString("userId");
         company = bundle.getString("company");
 
         floatingActionButton = view.findViewById(R.id.add_dealer);
+        progressBar = view.findViewById(R.id.progressBar4);
+        imageView = view.findViewById(R.id.empty);
 
         dealers = view.findViewById(R.id.dealersRecycler);
         db = FirebaseFirestore.getInstance();
@@ -110,6 +120,7 @@ public class DealersFragment extends Fragment {
     }
 
     private void getDealers(){
+        progressBar.setVisibility(View.VISIBLE);
         db.collection("Companies").document(company).collection("sales").document(salesId).collection("dealers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -130,6 +141,11 @@ public class DealersFragment extends Fragment {
 
                 dealersAdapter = new DealersAdapter(getContext(), dealersModelArrayList);
                 dealers.setAdapter(dealersAdapter);
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if(dealersModelArrayList.size()==0){
+                    imageView.setVisibility(View.VISIBLE);
+                }
             }
         });
     }

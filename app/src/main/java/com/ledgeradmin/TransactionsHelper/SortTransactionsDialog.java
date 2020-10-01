@@ -128,7 +128,9 @@ public class SortTransactionsDialog extends AppCompatDialogFragment implements D
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        String selectedDate = dayOfMonth + "/" + month + "/" + year;
+        int correctedMonth = month+1;
+
+        String selectedDate = dayOfMonth + "/" + correctedMonth + "/" + year;
 
         switch (type){
             case "1":
