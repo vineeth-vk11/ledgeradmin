@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,10 +27,11 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.ledgeradmin.CompaniesHelper.AddCompanyDialog;
 import com.ledgeradmin.R;
+import com.ledgeradmin.TransactionsHelper.TransactionsFragment;
 
 import java.util.ArrayList;
 
-public class SalesFragment extends Fragment {
+public class SalesFragment extends Fragment implements AddSalesDialog.OnSales {
 
     RecyclerView sales;
     FirebaseFirestore db;
@@ -45,6 +48,10 @@ public class SalesFragment extends Fragment {
     ImageButton sort;
     ImageButton download;
     ImageButton share;
+    ImageButton logout;
+
+    ProgressBar progressBar;
+    ImageView imageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,15 +65,19 @@ public class SalesFragment extends Fragment {
         sort = getActivity().findViewById(R.id.sort);
         download = getActivity().findViewById(R.id.download);
         share = getActivity().findViewById(R.id.share);
+        logout = getActivity().findViewById(R.id.logout);
 
         sort.setVisibility(View.INVISIBLE);
         download.setVisibility(View.INVISIBLE);
         share.setVisibility(View.INVISIBLE);
+        logout.setVisibility(View.INVISIBLE);
 
         Bundle bundle = getArguments();
         company = bundle.getString("company");
 
         floatingActionButton = view.findViewById(R.id.add_sales);
+        progressBar = view.findViewById(R.id.progressBar3);
+        imageView = view.findViewById(R.id.empty);
 
         sales = view.findViewById(R.id.salesRecycler);
         db = FirebaseFirestore.getInstance();
@@ -86,6 +97,7 @@ public class SalesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 AddSalesDialog addSalesDialog = new AddSalesDialog(null,null, null, null, null,null,company);
+                addSalesDialog.setTargetFragment(SalesFragment.this, 1);
                 addSalesDialog.show(getActivity().getSupportFragmentManager(), "Add Sales Dialog");
             }
         });
@@ -108,6 +120,7 @@ public class SalesFragment extends Fragment {
     }
 
     private void getSales(){
+        progressBar.setVisibility(View.VISIBLE);
         db.collection("Companies").document(company).collection("sales").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -131,7 +144,18 @@ public class SalesFragment extends Fragment {
 
                 salesAdapter = new SalesAdapter(getContext(), salesModelArrayList, company);
                 sales.setAdapter(salesAdapter);
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if(salesModelArrayList.size()==0){
+                    imageView.setVisibility(View.VISIBLE);
+                }
             }
         });
+    }
+
+    @Override
+    public void sendInput(String isAdded, String isEdited) {
+        Log.i("added",isAdded);
+        Log.i("edited",isEdited);
     }
 }

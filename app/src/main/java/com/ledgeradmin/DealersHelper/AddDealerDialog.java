@@ -137,6 +137,12 @@ public class AddDealerDialog extends AppCompatDialogFragment {
                         else if(TextUtils.isEmpty(enteredAddress)){
                             Toast.makeText(getActivity(), "Enter the address", Toast.LENGTH_SHORT).show();
                         }
+                        else if(!enteredEmail.contains("@")){
+                            Toast.makeText(getActivity(), "Enter a correct email", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(enteredPhoneNumber.length()!=10){
+                            Toast.makeText(getActivity(), "Enter a correct phone number", Toast.LENGTH_SHORT).show();
+                        }
                         else if(existingName!=null && existingEmail!=null && existingPassword!=null && existingPhoneNumber!=null && existingAddress!=null) {
                             final FirebaseFirestore db;
                             db = FirebaseFirestore.getInstance();

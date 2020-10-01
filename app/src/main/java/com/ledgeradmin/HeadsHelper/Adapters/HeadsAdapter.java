@@ -55,7 +55,7 @@ public class HeadsAdapter extends RecyclerView.Adapter<HeadsViewHolder> {
 
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 FirebaseFirestore db;
                 db = FirebaseFirestore.getInstance();
 
@@ -72,29 +72,28 @@ public class HeadsAdapter extends RecyclerView.Adapter<HeadsViewHolder> {
                             companiesModelArrayList.add(companiesModel);
                         }
 
-                        headsModelArrayList.get(position).setExistingCompanies(companiesModelArrayList);
+                        AddHeadFragment addHeadFragment = new AddHeadFragment();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("name", headsModelArrayList.get(position).getName());
+                        bundle.putString("email", headsModelArrayList.get(position).getEmail());
+                        bundle.putString("password", headsModelArrayList.get(position).getPassword());
+                        bundle.putString("phone", headsModelArrayList.get(position).getPhone());
+                        bundle.putString("address", headsModelArrayList.get(position).getAddress());
+                        bundle.putSerializable("companies", companiesModelArrayList);
+                        bundle.putString("id",headsModelArrayList.get(position).getId());
+
+                        addHeadFragment.setArguments(bundle);
+
+                        AppCompatActivity activity = (AppCompatActivity)v.getContext();
+                        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.main_frame, addHeadFragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
 
                     }
                 });
-
-                AddHeadFragment addHeadFragment = new AddHeadFragment();
-
-                Bundle bundle = new Bundle();
-                bundle.putString("name", headsModelArrayList.get(position).getName());
-                bundle.putString("email", headsModelArrayList.get(position).getEmail());
-                bundle.putString("password", headsModelArrayList.get(position).getPassword());
-                bundle.putString("phone", headsModelArrayList.get(position).getPhone());
-                bundle.putString("address", headsModelArrayList.get(position).getAddress());
-                bundle.putSerializable("companies", companiesModelArrayList);
-
-                addHeadFragment.setArguments(bundle);
-
-                AppCompatActivity activity = (AppCompatActivity)v.getContext();
-                FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.main_frame, addHeadFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
 
             }
         });

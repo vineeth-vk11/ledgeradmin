@@ -1,5 +1,6 @@
 package com.ledgeradmin.HeadsHelper;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,12 +10,15 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,10 +28,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.ledgeradmin.HeadsHelper.Adapters.CompaniesAdapter;
 import com.ledgeradmin.HeadsHelper.Models.CompaniesModel;
+import com.ledgeradmin.MainActivity;
+import com.ledgeradmin.MainHelper.MainFragment;
 import com.ledgeradmin.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class AddHeadFragment extends Fragment {
@@ -46,8 +53,10 @@ public class AddHeadFragment extends Fragment {
     EditText txtPhoneNumber;
     EditText txtAddress;
 
-    String name, email, password, phone, address;
+    String name, email, password, phone, address, id;
     ArrayList<CompaniesModel> existingCompanies;
+
+    ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,14 +76,16 @@ public class AddHeadFragment extends Fragment {
         txtPhoneNumber = view.findViewById(R.id.phone_number_edit);
         txtAddress = view.findViewById(R.id.address_edit);
 
+        progressBar = view.findViewById(R.id.progressBar7);
+
         if(getArguments() != null){
             name = bundle.getString("name");
             email = bundle.getString("email");
             password = bundle.getString("password");
-            phone = bundle.getString("password");
+            phone = bundle.getString("phone");
             address = bundle.getString("address");
+            id = bundle.getString("id");
             existingCompanies = (ArrayList<CompaniesModel>) bundle.get("companies");
-
 
             txtName.setText(name);
             txtEmail.setText(email);
@@ -83,8 +94,6 @@ public class AddHeadFragment extends Fragment {
             txtPhoneNumber.setText(phone);
 
         }
-
-
 
         db = FirebaseFirestore.getInstance();
 
@@ -119,13 +128,15 @@ public class AddHeadFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                progressBar.setVisibility(View.VISIBLE);
+
                 final String name = txtName.getText().toString();
                 final String email = txtEmail.getText().toString();
                 final String password = txtPassword.getText().toString();
                 final String phone = txtPhoneNumber.getText().toString();
                 final String address = txtAddress.getText().toString();
 
-                final HashMap<String, String> head = new HashMap<>();
+                final HashMap<String, Object> head = new HashMap<>();
                 head.put("name",name);
                 head.put("email",email);
                 head.put("password",password);
@@ -133,37 +144,109 @@ public class AddHeadFragment extends Fragment {
                 head.put("address",address);
                 head.put("role","head");
 
-                db.collection("Users").add(head).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        db.collection("Users").whereEqualTo("name",name).whereEqualTo("email",email).whereEqualTo("password",password)
-                                .whereEqualTo("phone",phone).whereEqualTo("address",address).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                if(TextUtils.isEmpty(name)){
+                    Toast.makeText(getActivity(), "Enter name", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+                else if(TextUtils.isEmpty(email)){
+                    Toast.makeText(getActivity(), "Enter email", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+                else if(TextUtils.isEmpty(password)){
+                    Toast.makeText(getActivity(), "Enter password", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+                else if(TextUtils.isEmpty(phone)){
+                    Toast.makeText(getActivity(), "Enter phone number", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+                else if(TextUtils.isEmpty(address)){
+                    Toast.makeText(getActivity(), "Enter address", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+                else if(!email.contains("@")){
+                    Toast.makeText(getActivity(), "Enter a correct email", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+                else if(phone.length()!=10){
+                    Toast.makeText(getActivity(), "Enter a correct number", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    if(getArguments() != null){
+
+                        db.collection("Heads").document(id).collection("companies").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                DocumentSnapshot documentSnapshot1 = task.getResult().getDocuments().get(0);
-                                final String id = documentSnapshot1.getId();
+                                for(DocumentSnapshot documentSnapshot1: task.getResult()){
+                                    String companyId = documentSnapshot1.getId();
 
-                                db.collection("Heads").document(id).set(head).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        for(int i= 0; i<selectedCompanies.size();i++){
+                                    db.collection("Heads").document(id).collection("companies").document(companyId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
 
-                                            db.collection("Heads").document(id).collection("companies").document(selectedCompanies.get(i).getId())
-                                            .set(selectedCompanies.get(i));
+                                            db.collection("Users").document(id).update(head).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    db.collection("Heads").document(id).update(head).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            for(int i= 0; i<selectedCompanies.size();i++){
 
-                                            HeadsFragment headsFragment = new HeadsFragment();
-                                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                            fragmentTransaction.replace(R.id.main_frame, headsFragment);
-                                            fragmentTransaction.addToBackStack(null);
-                                            fragmentTransaction.commit();
+                                                                db.collection("Heads").document(id).collection("companies").document(selectedCompanies.get(i).getId())
+                                                                        .set(selectedCompanies.get(i));
+
+                                                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                                                startActivity(intent);
+                                                                getActivity().finish();
+
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            });
                                         }
+                                    });
+                                }
+                            }
+                        });
+
+                    }
+                    else{
+
+                        db.collection("Users").add(head).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                db.collection("Users").whereEqualTo("name",name).whereEqualTo("email",email).whereEqualTo("password",password)
+                                        .whereEqualTo("phone",phone).whereEqualTo("address",address).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        DocumentSnapshot documentSnapshot1 = task.getResult().getDocuments().get(0);
+                                        final String id = documentSnapshot1.getId();
+
+                                        db.collection("Heads").document(id).set(head).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                for(int i= 0; i<selectedCompanies.size();i++){
+
+                                                    db.collection("Heads").document(id).collection("companies").document(selectedCompanies.get(i).getId())
+                                                            .set(selectedCompanies.get(i));
+
+                                                    Intent intent = new Intent(getContext(), MainActivity.class);
+                                                    startActivity(intent);
+                                                    getActivity().finish();
+
+                                                }
+                                            }
+                                        });
                                     }
                                 });
                             }
                         });
+
                     }
-                });
+                }
+
             }
         });
         return view;

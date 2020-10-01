@@ -1,5 +1,6 @@
 package com.ledgeradmin.HeadsHelper;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,6 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.ledgeradmin.HeadsHelper.Adapters.HeadsAdapter;
 import com.ledgeradmin.HeadsHelper.Models.HeadsModel;
+import com.ledgeradmin.LoginActivity;
 import com.ledgeradmin.R;
 
 import java.util.ArrayList;
@@ -36,6 +41,14 @@ public class HeadsFragment extends Fragment {
     FirebaseFirestore db;
     ArrayList<HeadsModel> headsModelArrayList;
 
+    ImageButton sort;
+    ImageButton download;
+    ImageButton share;
+    ImageButton logout;
+
+    ProgressBar progressBar;
+    ImageView imageView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,6 +58,28 @@ public class HeadsFragment extends Fragment {
         heads = view.findViewById(R.id.headRecycler);
         heads.setLayoutManager(new LinearLayoutManager(getContext()));
         heads.setHasFixedSize(true);
+
+        sort = getActivity().findViewById(R.id.sort);
+        download = getActivity().findViewById(R.id.download);
+        share = getActivity().findViewById(R.id.share);
+        logout = getActivity().findViewById(R.id.logout);
+        progressBar = view.findViewById(R.id.progressBar6);
+        imageView = view.findViewById(R.id.empty);
+
+        sort.setVisibility(View.INVISIBLE);
+        download.setVisibility(View.INVISIBLE);
+        share.setVisibility(View.INVISIBLE);
+        logout.setVisibility(View.VISIBLE);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
+
 
         db = FirebaseFirestore.getInstance();
 
@@ -77,9 +112,11 @@ public class HeadsFragment extends Fragment {
     }
 
     private void getHeads(){
+        progressBar.setVisibility(View.VISIBLE);
         db.collection("Heads").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                headsModelArrayList.clear();
                 for(DocumentSnapshot documentSnapshot:task.getResult()){
                     HeadsModel headsModel = new HeadsModel();
                     headsModel.setName(documentSnapshot.getString("name"));
@@ -95,6 +132,11 @@ public class HeadsFragment extends Fragment {
                 HeadsAdapter headsAdapter = new HeadsAdapter(getContext(), headsModelArrayList);
                 heads.setAdapter(headsAdapter);
 
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if(headsModelArrayList.size()==0){
+                    imageView.setVisibility(View.VISIBLE);
+                }
 
             }
         });

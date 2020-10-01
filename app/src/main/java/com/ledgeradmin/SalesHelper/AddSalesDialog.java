@@ -2,13 +2,16 @@ package com.ledgeradmin.SalesHelper;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +25,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.ledgeradmin.R;
+import com.ledgeradmin.TransactionsHelper.SortTransactionsDialog;
 
 import java.util.HashMap;
 
@@ -44,6 +48,8 @@ public class AddSalesDialog extends AppCompatDialogFragment {
 
     String company;
 
+    Button upload;
+
     public AddSalesDialog(String existingName, String existingEmail, String existingPassword, String existingPhoneNumber, String existingAddress, String id, String company) {
         this.existingName = existingName;
         this.existingEmail = existingEmail;
@@ -53,6 +59,12 @@ public class AddSalesDialog extends AppCompatDialogFragment {
         this.id = id;
         this.company = company;
     }
+
+    public interface OnSales{
+        void sendInput(String isAdded, String isEdited);
+    }
+
+    public OnSales onSales;
 
     @NonNull
     @Override
@@ -67,6 +79,7 @@ public class AddSalesDialog extends AppCompatDialogFragment {
         password = view.findViewById(R.id.password_edit);
         phoneNumber = view.findViewById(R.id.phone_number_edit);
         address = view.findViewById(R.id.address_edit);
+        upload = view.findViewById(R.id.upload);
 
         if(existingName!=null && existingEmail!=null && existingPassword!=null && existingPhoneNumber!=null && existingAddress!=null){
             name.setText(existingName);
@@ -122,6 +135,12 @@ public class AddSalesDialog extends AppCompatDialogFragment {
                         else if(TextUtils.isEmpty(enteredAddress)){
                             Toast.makeText(getActivity(), "Enter the address", Toast.LENGTH_SHORT).show();
                         }
+                        else if(!enteredEmail.contains("@")){
+                            Toast.makeText(getActivity(), "Enter a correct email", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(enteredPhoneNumber.length()!=10){
+                            Toast.makeText(getActivity(), "Enter a correct phone number", Toast.LENGTH_SHORT).show();
+                        }
                         else if(existingName!=null && existingEmail!=null && existingPassword!=null && existingPhoneNumber!=null && existingAddress!=null) {
                             final FirebaseFirestore db;
                             db = FirebaseFirestore.getInstance();
@@ -132,7 +151,6 @@ public class AddSalesDialog extends AppCompatDialogFragment {
                                     db.collection("Companies").document(company).collection("sales").document(id).set(sales).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-
                                         }
                                     });
                                 }
@@ -156,7 +174,6 @@ public class AddSalesDialog extends AppCompatDialogFragment {
                                             db.collection("Companies").document(company).collection("sales").document(createdId).set(sales).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
-
                                                 }
                                             });
                                         }
@@ -169,4 +186,16 @@ public class AddSalesDialog extends AppCompatDialogFragment {
 
         return builder.create();
     }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            onSales = (OnSales) getTargetFragment();
+        }catch (ClassCastException e){
+
+        }
+    }
+
 }
