@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     DrawerLayout drawerLayout;
 
     Uri uri;
+    //shubhamkeyal 
 
     public static final String SHARED_PREFS = "sharedPrefs";
 
