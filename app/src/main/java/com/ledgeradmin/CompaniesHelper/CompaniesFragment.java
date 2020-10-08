@@ -141,7 +141,7 @@ public class CompaniesFragment extends Fragment{
                     CompaniesModels companiesModels = new CompaniesModels();
                     companiesModels.setCompanyName(documentSnapshot.getString("name"));
                     companiesModels.setCompanyId(documentSnapshot.getId());
-
+                    companiesModels.setImage(documentSnapshot.getString("pic"));
                     companiesModelsArrayList.add(companiesModels);
                 }
 
@@ -151,6 +151,9 @@ public class CompaniesFragment extends Fragment{
 
                 if(companiesModelsArrayList.size()==0){
                     imageView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    imageView.setVisibility(View.INVISIBLE);
                 }
             }
         });

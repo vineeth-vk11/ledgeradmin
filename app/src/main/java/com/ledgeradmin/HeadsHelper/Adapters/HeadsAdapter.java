@@ -2,6 +2,7 @@ package com.ledgeradmin.HeadsHelper.Adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +20,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.ledgeradmin.CompaniesHelper.ConfirmationDialog;
 import com.ledgeradmin.HeadsHelper.AddHeadFragment;
 import com.ledgeradmin.HeadsHelper.HeadsFragment;
 import com.ledgeradmin.HeadsHelper.Models.CompaniesModel;
 import com.ledgeradmin.HeadsHelper.Models.HeadsModel;
 import com.ledgeradmin.HeadsHelper.ViewHolder.HeadsViewHolder;
+import com.ledgeradmin.ImageUploadActivity;
 import com.ledgeradmin.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -51,7 +55,24 @@ public class HeadsAdapter extends RecyclerView.Adapter<HeadsViewHolder> {
     public void onBindViewHolder(@NonNull HeadsViewHolder holder, final int position) {
 
         holder.head.setText(headsModelArrayList.get(position).getName());
-        holder.icon.setImageResource(R.drawable.ic_sales);
+
+
+        if(headsModelArrayList.get(position).getImage()!=null){
+            Picasso.get().load(headsModelArrayList.get(position).getImage()).into(holder.icon);
+        }
+        else {
+            holder.icon.setImageResource(R.drawable.ic_sales);
+        }
+
+        holder.icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ImageUploadActivity.class);
+                intent.putExtra("type","head");
+                intent.putExtra("id",headsModelArrayList.get(position).getId());
+                v.getContext().startActivity(intent);
+            }
+        });
 
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,16 +135,12 @@ public class HeadsAdapter extends RecyclerView.Adapter<HeadsViewHolder> {
                                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                FirebaseFirestore db;
-                                                db = FirebaseFirestore.getInstance();
 
-                                                db.collection("Heads").document(headsModelArrayList.get(position).getId())
-                                                        .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                AppCompatActivity activity = (AppCompatActivity) v.getContext();
 
-                                                    }
-                                                });
+                                                ConfirmationDialog confirmationDialog = new ConfirmationDialog("head",null,null,null,null,headsModelArrayList.get(position).getId());
+                                                confirmationDialog.show(activity.getSupportFragmentManager(), "Confirmation Dialog");
+
                                             }
                                         })
                                         .setNegativeButton("No",null).show();

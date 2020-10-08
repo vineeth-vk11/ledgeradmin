@@ -2,6 +2,7 @@ package com.ledgeradmin.DealersHelper;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.ledgeradmin.CompaniesHelper.ConfirmationDialog;
+import com.ledgeradmin.ImageUploadActivity;
 import com.ledgeradmin.R;
 import com.ledgeradmin.SalesHelper.AddSalesDialog;
 import com.ledgeradmin.TransactionsHelper.TransactionsFragment;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,7 +64,25 @@ public class DealersAdapter extends RecyclerView.Adapter<DealersViewHolder>  imp
         final String sales = dealersModelArrayList.get(position).getSalesId();
 
         holder.name.setText(dealersModelArrayList.get(position).getName());
-        holder.image.setImageResource(R.drawable.ic_dealer);
+
+        if(dealersModelArrayList.get(position).getImage() != null){
+            Picasso.get().load(dealersModelArrayList.get(position).getImage()).into(holder.image);
+        }
+        else{
+            holder.image.setImageResource(R.drawable.ic_dealer);
+        }
+
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ImageUploadActivity.class);
+                intent.putExtra("type","dealer");
+                intent.putExtra("company",company);
+                intent.putExtra("sales",sales);
+                intent.putExtra("id",id);
+                v.getContext().startActivity(intent);
+            }
+        });
 
         holder.dealer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,15 +134,13 @@ public class DealersAdapter extends RecyclerView.Adapter<DealersViewHolder>  imp
                                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                FirebaseFirestore db;
-                                                db = FirebaseFirestore.getInstance();
 
-                                                db.collection("Companies").document(company).collection("sales").document(sales).collection("dealers").document(id).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                AppCompatActivity activity = (AppCompatActivity) v.getContext();
 
-                                                    }
-                                                });
+                                                ConfirmationDialog confirmationDialog = new ConfirmationDialog("dealer",company,sales,id,null,null);
+                                                confirmationDialog.show(activity.getSupportFragmentManager(), "Confirmation Dialog");
+
+
                                             }
                                         })
                                         .setNegativeButton("No",null).show();

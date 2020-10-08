@@ -4,6 +4,7 @@ public class CompaniesModels {
 
     String companyName;
     String companyId;
+    String image;
 
     public CompaniesModels() {
     }
@@ -22,5 +23,13 @@ public class CompaniesModels {
 
     public void setCompanyId(String companyId) {
         this.companyId = companyId;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

@@ -10,6 +10,7 @@ public class SalesModel {
     String password;
     String phoneNumber;
     String role;
+    String image;
 
     public SalesModel() {
     }
@@ -76,5 +77,13 @@ public class SalesModel {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

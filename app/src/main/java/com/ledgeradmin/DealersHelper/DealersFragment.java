@@ -136,6 +136,10 @@ public class DealersFragment extends Fragment {
                     dealersModel.setAddress(documentSnapshot.getString("address"));
                     dealersModel.setPassword(documentSnapshot.getString("password"));
 
+                    if(documentSnapshot.getString("pic") != null){
+                        dealersModel.setImage(documentSnapshot.getString("pic"));
+                    }
+
                     dealersModelArrayList.add(dealersModel);
                 }
 
@@ -145,6 +149,9 @@ public class DealersFragment extends Fragment {
 
                 if(dealersModelArrayList.size()==0){
                     imageView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    imageView.setVisibility(View.INVISIBLE);
                 }
             }
         });

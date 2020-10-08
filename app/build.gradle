@@ -56,4 +56,7 @@ dependencies {
     implementation 'com.itextpdf:itextpdf:5.5.10'
     implementation 'com.karumi:dexter:5.0.0'
     implementation 'com.itextpdf:itext7-core:7.1.12'
+
+    implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
+
 }

@@ -126,6 +126,10 @@ public class HeadsFragment extends Fragment {
                     headsModel.setId(documentSnapshot.getId());
                     headsModel.setPhone(documentSnapshot.getString("phone"));
 
+                    if(documentSnapshot.getString("pic") != null){
+                        headsModel.setImage(documentSnapshot.getString("pic"));
+                    }
+
                     headsModelArrayList.add(headsModel);
                 }
 
@@ -136,6 +140,9 @@ public class HeadsFragment extends Fragment {
 
                 if(headsModelArrayList.size()==0){
                     imageView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    imageView.setVisibility(View.INVISIBLE);
                 }
 
             }

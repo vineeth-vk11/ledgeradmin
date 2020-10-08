@@ -2,7 +2,10 @@ package com.ledgeradmin.CompaniesHelper;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.se.omapi.SEService;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,34 +14,51 @@ import android.widget.Filterable;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.Builder;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.safetynet.SafetyNet;
+import com.google.android.gms.safetynet.SafetyNetApi;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.ledgeradmin.ImageUploadActivity;
+import com.ledgeradmin.MainActivity;
 import com.ledgeradmin.R;
 import com.ledgeradmin.SalesHelper.SalesFragment;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Executor;
 
-public class CompaniesAdapter extends RecyclerView.Adapter<CompaniesViewHolder> implements Filterable {
+public class CompaniesAdapter extends RecyclerView.Adapter<CompaniesViewHolder> implements Filterable, GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
 
     Context context;
     ArrayList<CompaniesModels>companiesModelsArrayList;
     ArrayList<CompaniesModels> companiesModelsArrayListAll;
-
 
     public CompaniesAdapter(Context context, ArrayList<CompaniesModels> companiesModelsArrayList) {
         this.context = context;
         this.companiesModelsArrayList = companiesModelsArrayList;
         this.companiesModelsArrayListAll = new ArrayList<>(companiesModelsArrayList);
     }
+
+    GoogleApiClient googleApiClient;
+
+    String site_key = "6LcQR9MZAAAAAAMtGdxK9Xl7V5OJKq_pUlTQd_W7";
 
     @NonNull
     @Override
@@ -57,6 +77,22 @@ public class CompaniesAdapter extends RecyclerView.Adapter<CompaniesViewHolder> 
         holder.companyName.setText(companyName);
         holder.image.setImageResource(R.drawable.ic_building_office);
 
+        if(companiesModelsArrayList.get(position).getImage() != null){
+            Picasso.get().load(companiesModelsArrayList.get(position).getImage()).into(holder.image);
+        }
+        else{
+            holder.image.setImageResource(R.drawable.ic_dealer);
+        }
+
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ImageUploadActivity.class);
+                intent.putExtra("type","company");
+                intent.putExtra("id",companiesModelsArrayList.get(position).getCompanyId());
+                v.getContext().startActivity(intent);
+            }
+        });
         holder.company.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,9 +122,13 @@ public class CompaniesAdapter extends RecyclerView.Adapter<CompaniesViewHolder> 
             }
         });
 
+
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+
                 new AlertDialog.Builder(v.getContext())
                         .setTitle("Delete Company")
                         .setMessage("Are you sure you want to delete the company?")
@@ -101,22 +141,17 @@ public class CompaniesAdapter extends RecyclerView.Adapter<CompaniesViewHolder> 
                                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                FirebaseFirestore db;
-                                                db = FirebaseFirestore.getInstance();
+                                                AppCompatActivity activity = (AppCompatActivity) v.getContext();
 
-                                                db.collection("Companies").document(companyId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        Toast.makeText(v.getContext(), "Company deleted successfully", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
+                                                ConfirmationDialog confirmationDialog = new ConfirmationDialog("company",companyId,null,null,null,null);
+                                                confirmationDialog.show(activity.getSupportFragmentManager(), "Confirmation Dialog");
+
                                             }
                                         })
                                         .setNegativeButton("No",null).show();
                             }
                         })
                         .setNegativeButton("No",null).show();
-
             }
         });
     }
@@ -160,4 +195,18 @@ public class CompaniesAdapter extends RecyclerView.Adapter<CompaniesViewHolder> 
         }
     };
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 }

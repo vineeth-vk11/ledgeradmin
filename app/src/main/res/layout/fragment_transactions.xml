@@ -82,8 +82,8 @@
         android:text="Opening Balance"
         android:textColor="@color/colorBlack"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
-        app:layout_constraintEnd_toStartOf="@+id/openingBalanceDebit"
-        app:layout_constraintHorizontal_bias="0.605"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.24"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -95,8 +95,8 @@
         android:text="Current Balance"
         android:textColor="@color/colorBlack"
         app:layout_constraintBottom_toTopOf="@+id/textView7"
-        app:layout_constraintEnd_toStartOf="@+id/currentDebit"
-        app:layout_constraintHorizontal_bias="0.586"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.237"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -108,8 +108,8 @@
         android:text="Total Outstanding"
         android:textColor="@color/colorBlack"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/outStandingTotal"
-        app:layout_constraintHorizontal_bias="0.635"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.246"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -190,8 +190,8 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/transactions_recycler"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/transactions_recycler"

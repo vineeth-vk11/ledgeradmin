@@ -137,6 +137,10 @@ public class SalesFragment extends Fragment implements AddSalesDialog.OnSales {
                     salesModel.setPhoneNumber(documentSnapshot.getString("phoneNumber"));
                     salesModel.setRole(documentSnapshot.getString("role"));
 
+                    if(documentSnapshot.getString("pic") != null){
+                        salesModel.setImage(documentSnapshot.getString("pic"));
+                    }
+
                     Log.i("name",documentSnapshot.getString("name"));
 
                     salesModelArrayList.add(salesModel);
@@ -148,6 +152,9 @@ public class SalesFragment extends Fragment implements AddSalesDialog.OnSales {
 
                 if(salesModelArrayList.size()==0){
                     imageView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    imageView.setVisibility(View.INVISIBLE);
                 }
             }
         });

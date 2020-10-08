@@ -10,7 +10,7 @@ public class HeadsModel {
     String phone;
     String name;
     String id;
-
+    String image;
     ArrayList<CompaniesModel> existingCompanies;
 
     public HeadsModel() {
@@ -71,4 +71,13 @@ public class HeadsModel {
     public void setExistingCompanies(ArrayList<CompaniesModel> existingCompanies) {
         this.existingCompanies = existingCompanies;
     }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
 }

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.ledgeradmin.CompaniesHelper.ConfirmationDialog;
 import com.ledgeradmin.R;
 import com.ledgeradmin.SalesHelper.AddSalesDialog;
 
@@ -92,17 +93,12 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsViewHo
                                                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                                             @Override
                                                             public void onClick(DialogInterface dialog, int which) {
-                                                                FirebaseFirestore db;
-                                                                db = FirebaseFirestore.getInstance();
 
-                                                                db.collection("Companies").document(company).collection("sales")
-                                                                        .document(sales).collection("dealers").document(dealer)
-                                                                        .collection("transactions").document(id).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                    @Override
-                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                AppCompatActivity activity = (AppCompatActivity) v.getContext();
 
-                                                                    }
-                                                                });
+                                                                ConfirmationDialog confirmationDialog = new ConfirmationDialog("transaction",company,sales,dealer,id,null);
+                                                                confirmationDialog.show(activity.getSupportFragmentManager(), "Confirmation Dialog");
+
                                                             }
                                                         })
                                                         .setNegativeButton("No",null).show();

@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class AddHeadFragment extends Fragment {
 
     RecyclerView companies;
@@ -140,7 +139,7 @@ public class AddHeadFragment extends Fragment {
                 head.put("name",name);
                 head.put("email",email);
                 head.put("password",password);
-                head.put("phone",phone);
+                head.put("phoneNumber",phone);
                 head.put("address",address);
                 head.put("role","head");
 
@@ -218,7 +217,7 @@ public class AddHeadFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<DocumentReference> task) {
                                 db.collection("Users").whereEqualTo("name",name).whereEqualTo("email",email).whereEqualTo("password",password)
-                                        .whereEqualTo("phone",phone).whereEqualTo("address",address).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        .whereEqualTo("phoneNumber",phone).whereEqualTo("address",address).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                         DocumentSnapshot documentSnapshot1 = task.getResult().getDocuments().get(0);

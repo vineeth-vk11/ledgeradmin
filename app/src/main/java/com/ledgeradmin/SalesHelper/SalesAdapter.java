@@ -2,6 +2,7 @@ package com.ledgeradmin.SalesHelper;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +22,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ledgeradmin.CompaniesHelper.AddCompanyDialog;
+import com.ledgeradmin.CompaniesHelper.ConfirmationDialog;
 import com.ledgeradmin.DealersHelper.DealersFragment;
+import com.ledgeradmin.ImageUploadActivity;
 import com.ledgeradmin.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,8 +66,24 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> implemen
         final String id = salesModelArrayList.get(position).getId();
 
         holder.name.setText(salesModelArrayList.get(position).getName());
-        holder.image.setImageResource(R.drawable.ic_sales);
 
+        if(salesModelArrayList.get(position).getImage() != null){
+            Picasso.get().load(salesModelArrayList.get(position).getImage()).into(holder.image);
+        }
+        else {
+            holder.image.setImageResource(R.drawable.ic_sales);
+        }
+
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ImageUploadActivity.class);
+                intent.putExtra("type","sales");
+                intent.putExtra("company",company);
+                intent.putExtra("id",id);
+                v.getContext().startActivity(intent);
+            }
+        });
         holder.sales.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,15 +129,12 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> implemen
                                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                FirebaseFirestore db;
-                                                db = FirebaseFirestore.getInstance();
 
-                                                db.collection("Companies").document(company).collection("sales").document(id).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                AppCompatActivity activity = (AppCompatActivity) v.getContext();
 
-                                                    }
-                                                });
+                                                ConfirmationDialog confirmationDialog = new ConfirmationDialog("sales",company,id,null,null,null);
+                                                confirmationDialog.show(activity.getSupportFragmentManager(), "Confirmation Dialog");
+
                                             }
                                         })
                                         .setNegativeButton("No",null).show();

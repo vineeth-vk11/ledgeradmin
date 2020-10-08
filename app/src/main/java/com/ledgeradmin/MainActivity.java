@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -38,7 +39,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks {
 
     String type;
     String userId;
@@ -124,6 +125,16 @@ public class MainActivity extends AppCompatActivity {
                 .setMultiTouchEnabled(true)
                 .setAspectRatio(1,1)
                 .start(this);
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
 
     }
 }
