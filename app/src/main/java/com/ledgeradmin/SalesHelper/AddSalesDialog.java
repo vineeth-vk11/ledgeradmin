@@ -111,7 +111,7 @@ public class AddSalesDialog extends AppCompatDialogFragment {
                         final String enteredPhoneNumber = phoneNumber.getText().toString();
                         final String enteredAddress = address.getText().toString();
 
-                        final HashMap<String, String> sales = new HashMap<>();
+                        final HashMap<String, Object> sales = new HashMap<>();
                         sales.put("name",enteredName);
                         sales.put("email",enteredEmail);
                         sales.put("password",enteredPassword);
@@ -148,7 +148,7 @@ public class AddSalesDialog extends AppCompatDialogFragment {
                             db.collection("Users").document(id).set(sales).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    db.collection("Companies").document(company).collection("sales").document(id).set(sales).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    db.collection("Companies").document(company).collection("sales").document(id).update(sales).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                         }

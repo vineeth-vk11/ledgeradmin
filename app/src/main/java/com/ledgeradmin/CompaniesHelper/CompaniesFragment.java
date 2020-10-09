@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -59,6 +60,8 @@ public class CompaniesFragment extends Fragment{
 
     ImageView imageView;
 
+    TextView toolbarText;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,6 +71,10 @@ public class CompaniesFragment extends Fragment{
         Log.i("activity", String.valueOf(getActivity()));
         imageButton = getActivity().findViewById(R.id.add_transaction);
         imageButton.setVisibility(View.INVISIBLE);
+
+        toolbarText = getActivity().findViewById(R.id.toolbar);
+        toolbarText.setText("Admin");
+        toolbarText.setTextSize(24);
 
         sort = getActivity().findViewById(R.id.sort);
         download = getActivity().findViewById(R.id.download);

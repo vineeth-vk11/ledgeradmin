@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,7 +37,7 @@ public class SalesFragment extends Fragment implements AddSalesDialog.OnSales {
     RecyclerView sales;
     FirebaseFirestore db;
     ArrayList<SalesModel> salesModelArrayList;
-    String company;
+    String company, name;
 
     FloatingActionButton floatingActionButton;
 
@@ -52,6 +53,8 @@ public class SalesFragment extends Fragment implements AddSalesDialog.OnSales {
 
     ProgressBar progressBar;
     ImageView imageView;
+
+    TextView toolbarText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +77,7 @@ public class SalesFragment extends Fragment implements AddSalesDialog.OnSales {
 
         Bundle bundle = getArguments();
         company = bundle.getString("company");
+        name = bundle.getString("name");
 
         floatingActionButton = view.findViewById(R.id.add_sales);
         progressBar = view.findViewById(R.id.progressBar3);
@@ -85,6 +89,9 @@ public class SalesFragment extends Fragment implements AddSalesDialog.OnSales {
 
         sales.setLayoutManager(new LinearLayoutManager(getContext()));
         sales.setHasFixedSize(true);
+
+        toolbarText = getActivity().findViewById(R.id.toolbar);
+        toolbarText.setText(name);
 
         db.collection("Companies").document(company).collection("sales").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

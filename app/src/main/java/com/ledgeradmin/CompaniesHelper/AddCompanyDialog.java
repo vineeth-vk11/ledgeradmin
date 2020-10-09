@@ -67,7 +67,7 @@ public class AddCompanyDialog extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
 
                         final String company = companyName.getText().toString();
-                        final HashMap<String, String> companyMap = new HashMap<>();
+                        final HashMap<String, Object> companyMap = new HashMap<>();
                         companyMap.put("name",company);
 
                         if(TextUtils.isEmpty(company)){
@@ -87,7 +87,7 @@ public class AddCompanyDialog extends AppCompatDialogFragment {
                             final FirebaseFirestore db;
                             db = FirebaseFirestore.getInstance();
 
-                            db.collection("Companies").document(existingId).set(companyMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            db.collection("Companies").document(existingId).update(companyMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
 

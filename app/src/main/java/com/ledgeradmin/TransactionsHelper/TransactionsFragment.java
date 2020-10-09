@@ -124,6 +124,8 @@ public class TransactionsFragment extends Fragment implements SortTransactionsDi
 
     TextView toAndFrom;
 
+    TextView toolbarText;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -140,6 +142,10 @@ public class TransactionsFragment extends Fragment implements SortTransactionsDi
 
         imageButton = getActivity().findViewById(R.id.add_transaction);
         imageButton.setVisibility(View.VISIBLE);
+
+        toolbarText = getActivity().findViewById(R.id.toolbar);
+        toolbarText.setText(name);
+        toolbarText.setTextSize(14);
 
         sort = getActivity().findViewById(R.id.sort);
         download = getActivity().findViewById(R.id.download);

@@ -112,7 +112,7 @@ public class AddDealerDialog extends AppCompatDialogFragment {
                         final String enteredPhoneNumber = phoneNumber.getText().toString();
                         final String enteredAddress = address.getText().toString();
 
-                        final HashMap<String, String> dealer = new HashMap<>();
+                        final HashMap<String, Object> dealer = new HashMap<>();
                         dealer.put("name",enteredName);
                         dealer.put("email",enteredEmail);
                         dealer.put("password",enteredPassword);
@@ -147,11 +147,11 @@ public class AddDealerDialog extends AppCompatDialogFragment {
                             final FirebaseFirestore db;
                             db = FirebaseFirestore.getInstance();
 
-                            db.collection("Users").document(id).set(dealer).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            db.collection("Users").document(id).update(dealer).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     db.collection("Companies").document(company).collection("sales").document(sales)
-                                            .collection("dealers").document(id).set(dealer).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            .collection("dealers").document(id).update(dealer).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
 

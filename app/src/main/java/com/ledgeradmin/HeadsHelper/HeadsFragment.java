@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -49,6 +50,8 @@ public class HeadsFragment extends Fragment {
     ProgressBar progressBar;
     ImageView imageView;
 
+    TextView toolbarText;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,6 +61,9 @@ public class HeadsFragment extends Fragment {
         heads = view.findViewById(R.id.headRecycler);
         heads.setLayoutManager(new LinearLayoutManager(getContext()));
         heads.setHasFixedSize(true);
+
+        toolbarText = getActivity().findViewById(R.id.toolbar);
+        toolbarText.setText("Admin");
 
         sort = getActivity().findViewById(R.id.sort);
         download = getActivity().findViewById(R.id.download);

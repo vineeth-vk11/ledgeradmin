@@ -45,7 +45,7 @@
                 android:paddingRight="8dp"
                 android:paddingLeft="8dp"
                 android:textColor="@color/colorBlack"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/edit"
                 app:layout_constraintHorizontal_bias="0.065"

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +38,7 @@ public class DealersFragment extends Fragment {
     ArrayList<DealersModel> dealersModelArrayList;
     String company;
     String salesId;
+    String salesName;
 
     FloatingActionButton floatingActionButton;
 
@@ -52,6 +54,8 @@ public class DealersFragment extends Fragment {
 
     ProgressBar progressBar;
     ImageView imageView;
+
+    TextView toolbarText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,10 +79,14 @@ public class DealersFragment extends Fragment {
         Bundle bundle = getArguments();
         salesId = bundle.getString("userId");
         company = bundle.getString("company");
+        salesName = bundle.getString("name");
 
         floatingActionButton = view.findViewById(R.id.add_dealer);
         progressBar = view.findViewById(R.id.progressBar4);
         imageView = view.findViewById(R.id.empty);
+
+        toolbarText = getActivity().findViewById(R.id.toolbar);
+        toolbarText.setText(salesName);
 
         dealers = view.findViewById(R.id.dealersRecycler);
         db = FirebaseFirestore.getInstance();
