@@ -11,6 +11,7 @@ public class DealersModel {
     String phoneNumber;
     String address;
     String image;
+    String osLimit;
 
     public DealersModel() {
     }
@@ -85,5 +86,13 @@ public class DealersModel {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getOsLimit() {
+        return osLimit;
+    }
+
+    public void setOsLimit(String osLimit) {
+        this.osLimit = osLimit;
     }
 }

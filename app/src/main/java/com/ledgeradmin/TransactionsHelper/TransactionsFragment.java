@@ -3,6 +3,7 @@ package com.ledgeradmin.TransactionsHelper;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -117,7 +118,7 @@ public class TransactionsFragment extends Fragment implements SortTransactionsDi
 
     ImageView imageView;
 
-    String name, address, number;
+    String name, address, number, osLimit;
 
     String initialDatePdf;
     String finalDatePdf;
@@ -125,6 +126,9 @@ public class TransactionsFragment extends Fragment implements SortTransactionsDi
     TextView toAndFrom;
 
     TextView toolbarText;
+
+    TextView alert;
+    ImageView alertImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -139,6 +143,7 @@ public class TransactionsFragment extends Fragment implements SortTransactionsDi
         number = bundle.getString("number");
         address = bundle.getString("address");
         name = bundle.getString("name");
+        osLimit = bundle.getString("osLimit");
 
         imageButton = getActivity().findViewById(R.id.add_transaction);
         imageButton.setVisibility(View.VISIBLE);
@@ -153,6 +158,7 @@ public class TransactionsFragment extends Fragment implements SortTransactionsDi
         logout = getActivity().findViewById(R.id.logout);
         toAndFrom = view.findViewById(R.id.toAndFrom);
 
+        alert = view.findViewById(R.id.alert);
         currentC = view.findViewById(R.id.currentCredit);
         currentD = view.findViewById(R.id.currentDebit);
         outstanding = view.findViewById(R.id.outStandingTotal);
@@ -161,6 +167,7 @@ public class TransactionsFragment extends Fragment implements SortTransactionsDi
         outStandingCredit = view.findViewById(R.id.outStandingCredit);
         progressBar = view.findViewById(R.id.progressBar5);
         imageView = view.findViewById(R.id.empty);
+        alertImage = view.findViewById(R.id.imageView4);
 
         sort.setVisibility(View.VISIBLE);
         download.setVisibility(View.VISIBLE);
@@ -943,6 +950,20 @@ public class TransactionsFragment extends Fragment implements SortTransactionsDi
                     outstanding.setText(String.valueOf(Math.abs(outStandingAmount) + " Dr"));
                 }
 
+                if(outStandingAmount<0){
+                    if(Integer.parseInt(osLimit)>Math.abs(outStandingAmount)){
+
+                        alert.setVisibility(View.GONE);
+                        alert.setVisibility(View.GONE);
+                    }else {
+
+                        alert.setVisibility(View.VISIBLE);
+                        alertImage.setVisibility(View.VISIBLE);
+
+                        alert.setText("Dealers outstanding limit is " + osLimit + " and current outstanding is "+String.valueOf(Math.abs(outStandingAmount)));
+                    }
+                }
+
                 currentC.setText(String.valueOf(Math.abs(currentCredit)));
                 currentD.setText(String.valueOf(Math.abs(currentDebit)));
 
@@ -1078,6 +1099,20 @@ public class TransactionsFragment extends Fragment implements SortTransactionsDi
                 }
                 else {
                     outstanding.setText(String.valueOf(Math.abs(outStandingAmount) + "Dr"));
+                }
+
+                if(outStandingAmount<0){
+                    if(Integer.parseInt(osLimit)>Math.abs(outStandingAmount)){
+
+                        alert.setVisibility(View.GONE);
+                        alert.setVisibility(View.GONE);
+                    }else {
+
+                        alert.setVisibility(View.VISIBLE);
+                        alertImage.setVisibility(View.VISIBLE);
+
+                        alert.setText("Dealers outstanding limit is " + osLimit + " and current outstanding is "+String.valueOf(Math.abs(outStandingAmount)));
+                    }
                 }
 
                 currentC.setText(String.valueOf(Math.abs(currentCredit)));

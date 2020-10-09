@@ -105,7 +105,7 @@ public class DealersFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddDealerDialog addDealerDialog = new AddDealerDialog(null,null,null,null,null,null,company,salesId);
+                AddDealerDialog addDealerDialog = new AddDealerDialog(null,null,null,null,null,null,null,company,salesId);
                 addDealerDialog.show(getActivity().getSupportFragmentManager(), "Add Dealer Dialog");
             }
         });
@@ -143,6 +143,13 @@ public class DealersFragment extends Fragment {
                     dealersModel.setPhoneNumber(documentSnapshot.getString("phoneNumber"));
                     dealersModel.setAddress(documentSnapshot.getString("address"));
                     dealersModel.setPassword(documentSnapshot.getString("password"));
+
+                    if(documentSnapshot.getString("osLimit") != null){
+                        dealersModel.setOsLimit(documentSnapshot.getString("osLimit"));
+                    }
+                    else {
+                        dealersModel.setOsLimit("none");
+                    }
 
                     if(documentSnapshot.getString("pic") != null){
                         dealersModel.setImage(documentSnapshot.getString("pic"));

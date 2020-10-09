@@ -62,6 +62,7 @@ public class DealersAdapter extends RecyclerView.Adapter<DealersViewHolder>  imp
         final String id = dealersModelArrayList.get(position).getId();
         final String company = dealersModelArrayList.get(position).getCompany();
         final String sales = dealersModelArrayList.get(position).getSalesId();
+        final String osLimit = dealersModelArrayList.get(position).getOsLimit();
 
         holder.name.setText(dealersModelArrayList.get(position).getName());
 
@@ -97,6 +98,7 @@ public class DealersAdapter extends RecyclerView.Adapter<DealersViewHolder>  imp
                 bundle.putString("name",dealersModelArrayList.get(position).getName());
                 bundle.putString("address",dealersModelArrayList.get(position).getAddress());
                 bundle.putString("number",dealersModelArrayList.get(position).getPhoneNumber());
+                bundle.putString("osLimit",dealersModelArrayList.get(position).getOsLimit());
 
                 transactionsFragment.setArguments(bundle);
 
@@ -114,7 +116,7 @@ public class DealersAdapter extends RecyclerView.Adapter<DealersViewHolder>  imp
             @Override
             public void onClick(View v) {
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                AddDealerDialog addDealerDialog = new AddDealerDialog(name,email,password,phoneNumber,address,id,company,sales);
+                AddDealerDialog addDealerDialog = new AddDealerDialog(name,email,password,phoneNumber,address,osLimit,id,company,sales);
                 addDealerDialog.show(activity.getSupportFragmentManager(), "Add Dealer Dialog");
             }
         });
