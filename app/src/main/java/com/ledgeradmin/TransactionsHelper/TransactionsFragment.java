@@ -71,7 +71,7 @@ import java.util.SortedSet;
 
 
 
-public class TransactionsFragment extends Fragment implements SortTransactionsDialog.OnDatesSelected, AddTransactionDialog.OnWhatsAppChecked {
+public class  TransactionsFragment extends Fragment implements SortTransactionsDialog.OnDatesSelected, AddTransactionDialog.OnWhatsAppChecked {
 
     RecyclerView transactions;
     FirebaseFirestore db;
@@ -236,6 +236,7 @@ public class TransactionsFragment extends Fragment implements SortTransactionsDi
         });
 
         searchView = view.findViewById(R.id.searchView);
+        searchView.setVisibility(View.GONE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -954,7 +955,7 @@ public class TransactionsFragment extends Fragment implements SortTransactionsDi
                     if(Integer.parseInt(osLimit)>Math.abs(outStandingAmount)){
 
                         alert.setVisibility(View.GONE);
-                        alert.setVisibility(View.GONE);
+                        alertImage.setVisibility(View.GONE);
                     }else {
 
                         alert.setVisibility(View.VISIBLE);
@@ -978,7 +979,7 @@ public class TransactionsFragment extends Fragment implements SortTransactionsDi
                 transactions.setAdapter(transactionsAdapter);
                 progressBar.setVisibility(View.INVISIBLE);
 
-                toAndFrom.setText(initialDatePdf + " - " + finalDatePdf);
+                toAndFrom.setText(initialDatePdf + " -- " + finalDatePdf);
 
                 if(transactionsModelArrayList.size()==0){
                     imageView.setVisibility(View.VISIBLE);
@@ -1125,7 +1126,7 @@ public class TransactionsFragment extends Fragment implements SortTransactionsDi
                 transactionsAdapter = new TransactionsAdapter(getContext(), transactionsModelArrayList);
                 transactions.setAdapter(transactionsAdapter);
                 progressBar.setVisibility(View.INVISIBLE);
-                toAndFrom.setText(initialDatePdf + " - " + finalDatePdf);
+                toAndFrom.setText(initialDatePdf + " -- " + finalDatePdf);
 
                 if(transactionsModelArrayList.size()==0){
                     imageView.setVisibility(View.VISIBLE);
