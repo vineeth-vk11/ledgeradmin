@@ -953,14 +953,12 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
 
                 if(outStandingAmount<0){
                     if(Integer.parseInt(osLimit)>Math.abs(outStandingAmount)){
-
                         alert.setVisibility(View.GONE);
                         alertImage.setVisibility(View.GONE);
                     }else {
 
                         alert.setVisibility(View.VISIBLE);
                         alertImage.setVisibility(View.VISIBLE);
-
                         alert.setText("Dealers outstanding limit is " + osLimit + " and current outstanding is "+String.valueOf(Math.abs(outStandingAmount)));
                     }
                 }
@@ -979,7 +977,8 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
                 transactions.setAdapter(transactionsAdapter);
                 progressBar.setVisibility(View.INVISIBLE);
 
-                toAndFrom.setText(initialDatePdf + " -- " + finalDatePdf);
+                String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+                toAndFrom.setText(initialDatePdf + " - " + date);
 
                 if(transactionsModelArrayList.size()==0){
                     imageView.setVisibility(View.VISIBLE);
