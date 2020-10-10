@@ -87,6 +87,7 @@ public class DealersFragment extends Fragment {
 
         toolbarText = getActivity().findViewById(R.id.toolbar);
         toolbarText.setText(salesName);
+        toolbarText.setTextSize(24);
 
         dealers = view.findViewById(R.id.dealersRecycler);
         db = FirebaseFirestore.getInstance();

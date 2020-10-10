@@ -92,6 +92,7 @@ public class SalesFragment extends Fragment implements AddSalesDialog.OnSales {
 
         toolbarText = getActivity().findViewById(R.id.toolbar);
         toolbarText.setText(name);
+        toolbarText.setTextSize(24);
 
         db.collection("Companies").document(company).collection("sales").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
