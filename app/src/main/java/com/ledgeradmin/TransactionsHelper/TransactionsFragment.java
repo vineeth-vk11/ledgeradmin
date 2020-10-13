@@ -326,11 +326,7 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
 
     private void createPDFFile(String name, String address, String initialDate, String finalDate) throws IOException {
 
-        Log.i("initial",initialDate);
-        Log.i("final",finalDate);
-
         String fileName = name + initialDate + "-" + finalDate+".pdf";
-        Log.i("fileName",fileName);
 
         String path = Environment.getExternalStorageDirectory() + File.separator + "LedgerAdmin.pdf";
         File file = new File(path);
@@ -578,10 +574,6 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
     }
 
     private File createPDFFileAndShare(String name, String address, String initialDate, String finalDate) throws IOException {
-
-        Log.i("initial",initialDate);
-        Log.i("final",finalDate);
-
         String fileName = name + initialDate + "-" + finalDate+".pdf";
         Log.i("fileName",fileName);
         String path = Environment.getExternalStorageDirectory() + File.separator + "LedgerAdmin.pdf";
@@ -971,6 +963,10 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
 
                 if(transactionsModelArrayList.size()!=0){
                     finalDatePdf = transactionsModelArrayList.get(0).getDate();
+                }
+                else {
+                    String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+                    finalDatePdf = date;
                 }
 
                 transactionsAdapter = new TransactionsAdapter(getContext(), transactionsModelArrayList);
