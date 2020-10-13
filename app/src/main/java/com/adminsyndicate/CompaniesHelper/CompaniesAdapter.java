@@ -1,14 +1,17 @@
-package com.adminsyndicate.CompaniesHelper;
+package com.ledgeradmin.CompaniesHelper;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.se.omapi.SEService;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,15 +22,27 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.adminsyndicate.ImageUploadActivity;
-import com.adminsyndicate.R;
-import com.adminsyndicate.SalesHelper.SalesFragment;
+import com.google.android.gms.common.api.GoogleApiClient.Builder;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.safetynet.SafetyNet;
+import com.google.android.gms.safetynet.SafetyNetApi;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.ledgeradmin.ImageUploadActivity;
+import com.ledgeradmin.MainActivity;
+import com.ledgeradmin.R;
+import com.ledgeradmin.SalesHelper.SalesFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class CompaniesAdapter extends RecyclerView.Adapter<CompaniesViewHolder> implements Filterable, GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
 
@@ -60,7 +75,6 @@ public class CompaniesAdapter extends RecyclerView.Adapter<CompaniesViewHolder> 
         final String companyId = companiesModelsArrayList.get(position).getCompanyId();
 
         holder.companyName.setText(companyName);
-
 
         if(companiesModelsArrayList.get(position).getImage() != null){
             Picasso.get().load(companiesModelsArrayList.get(position).getImage()).into(holder.image);
