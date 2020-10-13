@@ -254,7 +254,12 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
                             @Override
                             public void onPermissionGranted(PermissionGrantedResponse response) {
                                 try {
-                                    createPDFFile( name, address, initialDatePdf, finalDatePdf);
+                                    String currentDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+                                    if(initialDatePdf == null){
+                                        createPDFFile( name, address, currentDate, finalDatePdf, currentDate);
+                                    }else {
+                                        createPDFFile(name, address, initialDatePdf, finalDatePdf,currentDate);
+                                    }
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
@@ -286,7 +291,12 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
                                 File file = null;
 
                                 try {
-                                    file = createPDFFileAndShare(name, address, initialDatePdf, finalDatePdf);
+                                    String currentDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+                                    if(initialDatePdf == null){
+                                        file = createPDFFileAndShare( name, address, currentDate, finalDatePdf, currentDate);
+                                    }else {
+                                        file = createPDFFileAndShare(name, address, initialDatePdf, finalDatePdf, currentDate);
+                                    }
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
@@ -319,7 +329,7 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
         return view;
     }
 
-    private void createPDFFile(String name, String address, String initialDate, String finalDate) throws IOException {
+    private void createPDFFile(String name, String address, String initialDate, String finalDate, String currentDate) throws IOException {
 
         String fileName = name + initialDate + "-" + finalDate+".pdf";
 
@@ -363,15 +373,17 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
 
             addNewItem(document, "Ledger Account",Element.ALIGN_CENTER,dealerAddressFont);
 
-            document.add(new Paragraph(" "));
-
-            addNewItem(document, initialDatePdf +" - " + finalDatePdf,Element.ALIGN_CENTER,dealerAddressFont);
+            addNewItem(document, "Generated On :" + currentDate,Element.ALIGN_CENTER,dealerAddressFont);
 
             document.add(new Paragraph(" "));
+
+            addNewItem(document,  "Ledger Period :" + initialDate +" -- " + finalDate,Element.ALIGN_CENTER,dealerAddressFont);
+
+            document.add(new Paragraph(" "));
             document.add(new Paragraph(" "));
 
 
-            float[] columnWidths = {80f,100f,80f,100f,100f};
+            float[] columnWidths = {90f,130f,70f,90f,90f};
 
             PdfPTable table = new PdfPTable(columnWidths);
             table.setWidthPercentage(100);
@@ -380,7 +392,7 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
             cell1.setBorderColor(BaseColor.WHITE);
             cell1.setFixedHeight(50f);
 
-            PdfPCell cell2 = new PdfPCell(new Paragraph(new Paragraph(new Chunk("particular", titleFont))));
+            PdfPCell cell2 = new PdfPCell(new Paragraph(new Paragraph(new Chunk("Particulars", titleFont))));
             cell2.setBorderColor(BaseColor.WHITE);
             cell2.setFixedHeight(50f);
 
@@ -429,6 +441,12 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
             cell14.setBorderColor(BaseColor.WHITE);
             cell15.setBorderColor(BaseColor.WHITE);
 
+            cell11.setFixedHeight(30f);
+            cell12.setFixedHeight(30f);
+            cell13.setFixedHeight(30f);
+            cell14.setFixedHeight(30f);
+            cell15.setFixedHeight(30f);
+
             table.addCell(cell11);
             table.addCell(cell12);
             table.addCell(cell13);
@@ -436,7 +454,7 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
             table.addCell(cell15);
 
 
-            for(int i = 0; i<transactionsModelArrayList.size();i++){
+            for(int i = (transactionsModelArrayList.size() -1) ; i>=0;i--){
 
                 PdfPCell cell6 = new PdfPCell(new Paragraph(new Paragraph(new Chunk(transactionsModelArrayList.get(i).getDate(), transactionFont))));
                 PdfPCell cell7 = new PdfPCell(new Paragraph(new Paragraph(new Chunk(transactionsModelArrayList.get(i).getParticular(), transactionFont))));
@@ -528,9 +546,14 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
 
             PdfPCell cell34 ;
             PdfPCell cell35 ;
-
+            String amount;
+            if(outStandingAmount > 0){
+                amount = "Cr";
+            }else {
+                amount = "Dr";
+            }
             PdfPCell cell31 = new PdfPCell(new Paragraph(new Paragraph(new Chunk("", transactionFont))));
-            PdfPCell cell32 = new PdfPCell(new Paragraph(new Paragraph(new Chunk("Outstanding Balance", transactionFont1))));
+            PdfPCell cell32 = new PdfPCell(new Paragraph(new Paragraph(new Chunk("Outstanding Balance (" + amount + ")", transactionFont1))));
             PdfPCell cell33 = new PdfPCell(new Paragraph(new Paragraph(new Chunk("", transactionFont))));
 
             if(outStandingAmount>0){
@@ -568,7 +591,7 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
 
     }
 
-    private File createPDFFileAndShare(String name, String address, String initialDate, String finalDate) throws IOException {
+    private File createPDFFileAndShare(String name, String address, String initialDate, String finalDate, String currentDate) throws IOException {
         String fileName = name + initialDate + "-" + finalDate+".pdf";
         Log.i("fileName",fileName);
         String path = Environment.getExternalStorageDirectory() + File.separator + "LedgerAdmin.pdf";
@@ -596,8 +619,8 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
             Font transactionFont1 = new Font(fontName, 16.0f, Font.NORMAL, BaseColor.BLACK);
             Font transactionFont2 = new Font(fontName, 16.0f, Font.NORMAL, BaseColor.WHITE);
 
-            addNewItem(document, "21 ST CENTURY BUSINESS SYNDICATE", Element.ALIGN_CENTER, titleFont);
-            addNewItem(document, "Contact : 0612-2325412,9334120345", Element.ALIGN_CENTER, contactFont);
+            addNewItem(document, "21ST CENTURY BUSINESS SYNDICATE", Element.ALIGN_CENTER, titleFont);
+            addNewItem(document, "Contact : 0612-2325412, 9334120345", Element.ALIGN_CENTER, contactFont);
 
             document.add(new Paragraph(" "));
 
@@ -611,15 +634,17 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
 
             addNewItem(document, "Ledger Account",Element.ALIGN_CENTER,dealerAddressFont);
 
-            document.add(new Paragraph(" "));
-
-            addNewItem(document, initialDatePdf +" - " + finalDatePdf,Element.ALIGN_CENTER,dealerAddressFont);
+            addNewItem(document, "Generated on : " + currentDate,Element.ALIGN_CENTER,dealerAddressFont);
 
             document.add(new Paragraph(" "));
+
+            addNewItem(document, "Ledger Period : " + initialDate +" - " + finalDate,Element.ALIGN_CENTER,dealerAddressFont);
+
+            document.add(new Paragraph(" "));
             document.add(new Paragraph(" "));
 
 
-            float[] columnWidths = {80f,100f,80f,100f,100f};
+            float[] columnWidths = {90f,130f,70f,90f,90f};
 
             PdfPTable table = new PdfPTable(columnWidths);
             table.setWidthPercentage(100);
@@ -628,7 +653,7 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
             cell1.setBorderColor(BaseColor.WHITE);
             cell1.setFixedHeight(50f);
 
-            PdfPCell cell2 = new PdfPCell(new Paragraph(new Paragraph(new Chunk("particular", titleFont))));
+            PdfPCell cell2 = new PdfPCell(new Paragraph(new Paragraph(new Chunk("Particulars", titleFont))));
             cell2.setBorderColor(BaseColor.WHITE);
             cell2.setFixedHeight(50f);
 
@@ -677,6 +702,12 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
             cell14.setBorderColor(BaseColor.WHITE);
             cell15.setBorderColor(BaseColor.WHITE);
 
+            cell11.setFixedHeight(30f);
+            cell12.setFixedHeight(30f);
+            cell13.setFixedHeight(30f);
+            cell14.setFixedHeight(30f);
+            cell15.setFixedHeight(30f);
+
             table.addCell(cell11);
             table.addCell(cell12);
             table.addCell(cell13);
@@ -684,7 +715,7 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
             table.addCell(cell15);
 
 
-            for(int i = 0; i<transactionsModelArrayList.size();i++){
+            for(int i = (transactionsModelArrayList.size() -1) ; i>=0;i--){
 
                 PdfPCell cell6 = new PdfPCell(new Paragraph(new Paragraph(new Chunk(transactionsModelArrayList.get(i).getDate(), transactionFont))));
                 PdfPCell cell7 = new PdfPCell(new Paragraph(new Paragraph(new Chunk(transactionsModelArrayList.get(i).getParticular(), transactionFont))));
@@ -776,9 +807,14 @@ public class  TransactionsFragment extends Fragment implements SortTransactionsD
 
             PdfPCell cell34 ;
             PdfPCell cell35 ;
-
+            String amount;
+            if(outStandingAmount > 0){
+                amount = "Cr";
+            }else {
+                amount = "Dr";
+            }
             PdfPCell cell31 = new PdfPCell(new Paragraph(new Paragraph(new Chunk("", transactionFont))));
-            PdfPCell cell32 = new PdfPCell(new Paragraph(new Paragraph(new Chunk("Outstanding Balance", transactionFont1))));
+            PdfPCell cell32 = new PdfPCell(new Paragraph(new Paragraph(new Chunk("Outstanding Balance (" + amount + ")", transactionFont1))));
             PdfPCell cell33 = new PdfPCell(new Paragraph(new Paragraph(new Chunk("", transactionFont))));
 
             if(outStandingAmount>0){

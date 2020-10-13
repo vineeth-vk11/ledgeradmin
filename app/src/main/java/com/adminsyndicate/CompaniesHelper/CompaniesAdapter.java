@@ -1,4 +1,4 @@
-package com.ledgeradmin.CompaniesHelper;
+package com.adminsyndicate.CompaniesHelper;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,10 +33,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.ledgeradmin.ImageUploadActivity;
-import com.ledgeradmin.MainActivity;
-import com.ledgeradmin.R;
-import com.ledgeradmin.SalesHelper.SalesFragment;
+import com.adminsyndicate.ImageUploadActivity;
+import com.adminsyndicate.MainActivity;
+import com.adminsyndicate.R;
+import com.adminsyndicate.SalesHelper.SalesFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
