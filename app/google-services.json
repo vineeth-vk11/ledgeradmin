@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "32693858956",
-    "firebase_url": "https://ledger-a3e41.firebaseio.com",
-    "project_id": "ledger-a3e41",
-    "storage_bucket": "ledger-a3e41.appspot.com"
+    "project_number": "1043967310092",
+    "firebase_url": "https://stcbs-5d894.firebaseio.com",
+    "project_id": "stcbs-5d894",
+    "storage_bucket": "stcbs-5d894.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:32693858956:android:05db8f4d1a8035aefb81a9",
+        "mobilesdk_app_id": "1:1043967310092:android:a2359f99d5f12b0a887129",
         "android_client_info": {
-          "package_name": "com.ledger"
+          "package_name": "com.adminsyndicate"
         }
       },
       "oauth_client": [
         {
-          "client_id": "32693858956-3tqcuptp8c6erib0a9eccc0147aabm31.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.ledger",
-            "certificate_hash": "8481498d744f894a6dbe670ac530e382491ef038"
-          }
-        },
-        {
-          "client_id": "32693858956-qo8dg4m1859dsfgugqd80kru8hmliv3n.apps.googleusercontent.com",
+          "client_id": "1043967310092-341abetpehulmuane0vqdmujocu33n4v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAQNwftQaSh3pNmK9b14c_u_H7YNw2tjxw"
+          "current_key": "AIzaSyCkJ-J2-J4WzjW2uCU-3cAGXJrS0F1ogi0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "32693858956-qo8dg4m1859dsfgugqd80kru8hmliv3n.apps.googleusercontent.com",
+              "client_id": "1043967310092-341abetpehulmuane0vqdmujocu33n4v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -45,35 +37,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:32693858956:android:3eaace53a17b4c52fb81a9",
+        "mobilesdk_app_id": "1:1043967310092:android:3f4a4989409d4771887129",
         "android_client_info": {
-          "package_name": "com.ledgeradmin"
+          "package_name": "com.syndicate"
         }
       },
       "oauth_client": [
         {
-          "client_id": "32693858956-m6kqcmtmn4uk9mgednl0htl2c33qccdj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.ledgeradmin",
-            "certificate_hash": "8481498d744f894a6dbe670ac530e382491ef038"
-          }
-        },
-        {
-          "client_id": "32693858956-qo8dg4m1859dsfgugqd80kru8hmliv3n.apps.googleusercontent.com",
+          "client_id": "1043967310092-341abetpehulmuane0vqdmujocu33n4v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAQNwftQaSh3pNmK9b14c_u_H7YNw2tjxw"
+          "current_key": "AIzaSyCkJ-J2-J4WzjW2uCU-3cAGXJrS0F1ogi0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "32693858956-qo8dg4m1859dsfgugqd80kru8hmliv3n.apps.googleusercontent.com",
+              "client_id": "1043967310092-341abetpehulmuane0vqdmujocu33n4v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

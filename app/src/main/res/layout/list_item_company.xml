@@ -41,14 +41,14 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:fontFamily="@font/montserrat"
-                android:text="Company1"
-                android:paddingRight="8dp"
                 android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="Company1"
                 android:textColor="@color/colorBlack"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/edit"
-                app:layout_constraintHorizontal_bias="0.065"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/imageView2"
                 app:layout_constraintTop_toTopOf="parent" />
 
