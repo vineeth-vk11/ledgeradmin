@@ -75,13 +75,12 @@ public class CompaniesAdapter extends RecyclerView.Adapter<CompaniesViewHolder> 
         final String companyId = companiesModelsArrayList.get(position).getCompanyId();
 
         holder.companyName.setText(companyName);
-        holder.image.setImageResource(R.drawable.ic_building_office);
 
         if(companiesModelsArrayList.get(position).getImage() != null){
             Picasso.get().load(companiesModelsArrayList.get(position).getImage()).into(holder.image);
         }
         else{
-            holder.image.setImageResource(R.drawable.ic_dealer);
+            holder.image.setImageResource(R.drawable.ic_building_office);
         }
 
         holder.image.setOnClickListener(new View.OnClickListener() {
