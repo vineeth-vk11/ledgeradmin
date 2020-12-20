@@ -104,7 +104,7 @@ public class SalesFragment extends Fragment implements AddSalesDialog.OnSales {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddSalesDialog addSalesDialog = new AddSalesDialog(null,null, null, null, null,null,company);
+                AddSalesDialog addSalesDialog = new AddSalesDialog(null,null, null, null, null,null,company, null);
                 addSalesDialog.setTargetFragment(SalesFragment.this, 1);
                 addSalesDialog.show(getActivity().getSupportFragmentManager(), "Add Sales Dialog");
             }
@@ -144,12 +144,11 @@ public class SalesFragment extends Fragment implements AddSalesDialog.OnSales {
                     salesModel.setPassword(documentSnapshot.getString("password"));
                     salesModel.setPhoneNumber(documentSnapshot.getString("phoneNumber"));
                     salesModel.setRole(documentSnapshot.getString("role"));
+                    salesModel.setSalesTarget(documentSnapshot.getString("salesTarget"));
 
                     if(documentSnapshot.getString("pic") != null){
                         salesModel.setImage(documentSnapshot.getString("pic"));
                     }
-
-                    Log.i("name",documentSnapshot.getString("name"));
 
                     salesModelArrayList.add(salesModel);
                 }

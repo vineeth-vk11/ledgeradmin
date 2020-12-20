@@ -36,12 +36,14 @@ public class AddSalesDialog extends AppCompatDialogFragment {
     EditText password;
     EditText phoneNumber;
     EditText address;
+    EditText salesTarget;
 
     String existingName;
     String existingEmail;
     String existingPassword;
     String existingPhoneNumber;
     String existingAddress;
+    String existingSalesTarget;
     String id;
 
     String positive;
@@ -50,7 +52,7 @@ public class AddSalesDialog extends AppCompatDialogFragment {
 
     Button upload;
 
-    public AddSalesDialog(String existingName, String existingEmail, String existingPassword, String existingPhoneNumber, String existingAddress, String id, String company) {
+    public AddSalesDialog(String existingName, String existingEmail, String existingPassword, String existingPhoneNumber, String existingAddress, String id, String company, String existingSalesTarget) {
         this.existingName = existingName;
         this.existingEmail = existingEmail;
         this.existingPassword = existingPassword;
@@ -58,6 +60,7 @@ public class AddSalesDialog extends AppCompatDialogFragment {
         this.existingAddress = existingAddress;
         this.id = id;
         this.company = company;
+        this.existingSalesTarget = existingSalesTarget;
     }
 
     public interface OnSales{
@@ -80,6 +83,7 @@ public class AddSalesDialog extends AppCompatDialogFragment {
         phoneNumber = view.findViewById(R.id.phone_number_edit);
         address = view.findViewById(R.id.address_edit);
         upload = view.findViewById(R.id.upload);
+        salesTarget = view.findViewById(R.id.sales_edit);
 
         if(existingName!=null && existingEmail!=null && existingPassword!=null && existingPhoneNumber!=null && existingAddress!=null){
             name.setText(existingName);
@@ -87,6 +91,7 @@ public class AddSalesDialog extends AppCompatDialogFragment {
             password.setText(existingPassword);
             phoneNumber.setText(existingPhoneNumber);
             address.setText(existingAddress);
+            salesTarget.setText(existingSalesTarget);
             positive = "Save";
         }
         else{
@@ -110,6 +115,7 @@ public class AddSalesDialog extends AppCompatDialogFragment {
                         final String enteredPassword = password.getText().toString();
                         final String enteredPhoneNumber = phoneNumber.getText().toString();
                         final String enteredAddress = address.getText().toString();
+                        final String enteredSalesTarget = salesTarget.getText().toString();
 
                         final HashMap<String, Object> sales = new HashMap<>();
                         sales.put("name",enteredName);
@@ -119,6 +125,7 @@ public class AddSalesDialog extends AppCompatDialogFragment {
                         sales.put("address",enteredAddress);
                         sales.put("role","sales");
                         sales.put("company", company);
+                        sales.put("salesTarget",enteredSalesTarget);
 
                         if(TextUtils.isEmpty(enteredName)){
                             Toast.makeText(getActivity(), "Enter the name", Toast.LENGTH_SHORT).show();
@@ -140,6 +147,9 @@ public class AddSalesDialog extends AppCompatDialogFragment {
                         }
                         else if(enteredPhoneNumber.length()!=10){
                             Toast.makeText(getActivity(), "Enter a correct phone number", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(TextUtils.isEmpty(enteredSalesTarget)){
+                            Toast.makeText(getActivity(), "Enter a sales target", Toast.LENGTH_SHORT).show();
                         }
                         else if(existingName!=null && existingEmail!=null && existingPassword!=null && existingPhoneNumber!=null && existingAddress!=null) {
                             final FirebaseFirestore db;

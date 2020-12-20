@@ -69,8 +69,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.SortedSet;
 
-
-
 public class  TransactionsFragment extends Fragment implements SortTransactionsDialog.OnDatesSelected, AddTransactionDialog.OnWhatsAppChecked {
 
     RecyclerView transactions;

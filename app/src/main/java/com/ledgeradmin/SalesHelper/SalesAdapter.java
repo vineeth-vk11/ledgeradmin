@@ -64,6 +64,7 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> implemen
         final String address = salesModelArrayList.get(position).getAddress();
         final String company = salesModelArrayList.get(position).getCompany();
         final String id = salesModelArrayList.get(position).getId();
+        final String salesTarget = salesModelArrayList.get(position).getSalesTarget();
 
         holder.name.setText(salesModelArrayList.get(position).getName());
 
@@ -110,7 +111,7 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> implemen
             @Override
             public void onClick(View v) {
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                AddSalesDialog addSalesDialog = new AddSalesDialog(name,email,password,phoneNumber,address,id,company);
+                AddSalesDialog addSalesDialog = new AddSalesDialog(name,email,password,phoneNumber,address,id,company,salesTarget);
                 addSalesDialog.show(activity.getSupportFragmentManager(), "Add Sales Dialog");
             }
         });

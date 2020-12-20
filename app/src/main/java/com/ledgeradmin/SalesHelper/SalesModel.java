@@ -11,6 +11,7 @@ public class SalesModel {
     String phoneNumber;
     String role;
     String image;
+    String salesTarget;
 
     public SalesModel() {
     }
@@ -85,5 +86,13 @@ public class SalesModel {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getSalesTarget() {
+        return salesTarget;
+    }
+
+    public void setSalesTarget(String salesTarget) {
+        this.salesTarget = salesTarget;
     }
 }

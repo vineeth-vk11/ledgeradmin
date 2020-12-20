@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.ledgeradmin.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AddDealerDialog extends AppCompatDialogFragment {
@@ -34,6 +37,8 @@ public class AddDealerDialog extends AppCompatDialogFragment {
     EditText phoneNumber;
     EditText address;
     EditText osLimit;
+    AutoCompleteTextView healthValue;
+    EditText stockValue;
 
     String existingName;
     String existingEmail;
@@ -42,14 +47,17 @@ public class AddDealerDialog extends AppCompatDialogFragment {
     String existingAddress;
     String id;
     String existingOsLimit;
+    String existingHealth;
+    String existingStock;
 
     String positive;
 
     String company;
     String sales;
 
+    ArrayList<String> healthValues = new ArrayList<>();
 
-    public AddDealerDialog(String existingName, String existingEmail, String existingPassword, String existingPhoneNumber, String existingAddress, String existingOsLimit, String id, String company, String sales) {
+    public AddDealerDialog(String existingName, String existingEmail, String existingPassword, String existingPhoneNumber, String existingAddress, String existingOsLimit, String id, String company, String sales, String existingHealth, String existingStock) {
         this.existingName = existingName;
         this.existingEmail = existingEmail;
         this.existingPassword = existingPassword;
@@ -59,6 +67,8 @@ public class AddDealerDialog extends AppCompatDialogFragment {
         this.id = id;
         this.company = company;
         this.sales = sales;
+        this.existingHealth = existingHealth;
+        this.existingStock = existingStock;
     }
 
     @NonNull
@@ -69,6 +79,9 @@ public class AddDealerDialog extends AppCompatDialogFragment {
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.dialog_dealers, null);
 
+        healthValues.add("Good");
+        healthValues.add("Ok");
+        healthValues.add("Bad");
 
         name = view.findViewById(R.id.name_edit);
         email = view.findViewById(R.id.email_edit);
@@ -76,8 +89,11 @@ public class AddDealerDialog extends AppCompatDialogFragment {
         phoneNumber = view.findViewById(R.id.phone_number_edit);
         address = view.findViewById(R.id.address_edit);
         osLimit = view.findViewById(R.id.os_edit);
+        healthValue = view.findViewById(R.id.health_edit);
+        stockValue = view.findViewById(R.id.stock_edit);
 
-        if(existingName!=null && existingEmail!=null && existingPassword!=null && existingPhoneNumber!=null && existingAddress!=null && existingOsLimit != null){
+        if(existingName!=null && existingEmail!=null && existingPassword!=null && existingPhoneNumber!=null && existingAddress!=null && existingOsLimit != null
+        && existingHealth != null && existingStock != null){
             name.setText(existingName);
             email.setText(existingEmail);
             password.setText(existingPassword);
@@ -85,10 +101,20 @@ public class AddDealerDialog extends AppCompatDialogFragment {
             address.setText(existingAddress);
             osLimit.setText(existingOsLimit);
             positive = "Save";
+            healthValue.setText(existingHealth);
+            stockValue.setText(existingStock);
         }
         else{
             positive = "Add";
         }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                getActivity(),
+                R.layout.dropdown_menu_popup_item,
+                healthValues
+        );
+
+        healthValue.setAdapter(adapter);
 
         builder.setView(view)
                 .setTitle("Add Dealer Person")
@@ -108,6 +134,8 @@ public class AddDealerDialog extends AppCompatDialogFragment {
                         final String enteredPhoneNumber = phoneNumber.getText().toString();
                         final String enteredAddress = address.getText().toString();
                         final String enteredOsLimit = osLimit.getText().toString();
+                        final String enteredHealth = healthValue.getText().toString();
+                        final String enteredStock = stockValue.getText().toString();
 
                         final HashMap<String, Object> dealer = new HashMap<>();
                         dealer.put("name",enteredName);
@@ -119,6 +147,8 @@ public class AddDealerDialog extends AppCompatDialogFragment {
                         dealer.put("company", company);
                         dealer.put("sales",sales);
                         dealer.put("osLimit",enteredOsLimit);
+                        dealer.put("healthValue",enteredHealth);
+                        dealer.put("stockValue",enteredStock);
 
                         if(TextUtils.isEmpty(enteredName)){
                             Toast.makeText(getActivity(), "Enter the name", Toast.LENGTH_SHORT).show();
@@ -143,6 +173,12 @@ public class AddDealerDialog extends AppCompatDialogFragment {
                         }
                         else if(TextUtils.isEmpty(enteredOsLimit)){
                             Toast.makeText(getActivity(), "Enter a outstanding limit", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(TextUtils.isEmpty(enteredHealth)){
+                            Toast.makeText(getActivity(), "Enter Health Value", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(TextUtils.isEmpty(enteredStock)){
+                            Toast.makeText(getActivity(), "Enter Stock Value", Toast.LENGTH_SHORT).show();
                         }
                         else if(existingName!=null && existingEmail!=null && existingPassword!=null && existingPhoneNumber!=null && existingAddress!=null && existingOsLimit!= null) {
                             final FirebaseFirestore db;

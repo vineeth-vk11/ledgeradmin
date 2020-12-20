@@ -74,7 +74,7 @@
                 android:layout_width="250dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="16dp"
-                android:backgroundTint="#7200C5"
+                android:backgroundTint="#f04c42"
                 android:elevation="4dp"
                 android:text="Login"
                 app:layout_constraintEnd_toEndOf="parent"
